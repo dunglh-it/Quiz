@@ -1,13 +1,21 @@
+import axios from "axios"
 import React, { useState } from "react"
 import { ModalBody } from "react-bootstrap"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import { FcPlus } from "react-icons/fc"
 
-const ModalCreateUser = () => {
-    const [show, setShow] = useState(false)
-
-    const handleClose = () => setShow(false)
+const ModalCreateUser = (props) => {
+    const { show, setShow } = props
+    const handleClose = () => {
+        setShow(false)
+        setEmail("")
+        setPassword("")
+        setUsername("")
+        setRole("USER")
+        setImage("")
+        setPreviewImage("")
+    }
     const handleShow = () => setShow(true)
 
     const [email, setEmail] = useState("")
@@ -26,11 +34,30 @@ const ModalCreateUser = () => {
         }
     }
 
+    const handSubmitCreateUser = async () => {
+        // let data = {
+        //     email: email,
+        //     password: password,
+        //     username: username,
+        //     role: role,
+        //     userImage: image,
+        // }
+
+        const data = new FormData()
+        data.append("email", email)
+        data.append("password", password)
+        data.append("username", username)
+        data.append("role", role)
+        data.append("userImage", image)
+
+        let res = await axios.post("http://localhost:8081/api/v1/participant", data)
+    }
+
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            {/* <Button variant="primary" onClick={handleShow}>
                 Launch demo modal
-            </Button>
+            </Button> */}
 
             <Modal show={show} onHide={handleClose} size="xl" backdrop="static" className="modal-add-user">
                 <Modal.Header closeButton>
@@ -90,7 +117,7 @@ const ModalCreateUser = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handSubmitCreateUser}>
                         Save
                     </Button>
                 </Modal.Footer>
