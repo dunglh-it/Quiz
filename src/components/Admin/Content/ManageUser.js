@@ -5,11 +5,14 @@ import TableUser from "./TableUser"
 import { useEffect, useState } from "react"
 import { getAllUsers } from "../../../services/apiService"
 import ModalUpdateUSer from "./ModalUpdateUser"
+import ModalViewUSer from "./ModalViewUser"
 
 const ManageUser = (props) => {
     const [showModalCreateUser, setShowModalCreateUser] = useState(false)
     const [showModalUpdateUser, setShowModalUpdateUSer] = useState(false)
+    const [showModalViewUser, setShowModalViewUSer] = useState(false)
     const [dataUpdate, setDataUpdate] = useState({})
+    const [dataView, setDataView] = useState({})
 
     const [listUsers, setListUsers] = useState([])
 
@@ -29,8 +32,17 @@ const ManageUser = (props) => {
         setDataUpdate(user)
     }
 
+    const handleClickBtnView = (user) => {
+        setShowModalViewUSer(true)
+        setDataView(user)
+    }
+
     const resetUpdateData = () => {
         setDataUpdate({})
+    }
+
+    const resetViewData = () => {
+        setDataView({})
     }
 
     return (
@@ -49,7 +61,11 @@ const ManageUser = (props) => {
                     </button>
                 </div>
                 <div className="table-users-container">
-                    <TableUser listUsers={listUsers} handleClickBtnUpdate={handleClickBtnUpdate} />
+                    <TableUser
+                        listUsers={listUsers}
+                        handleClickBtnUpdate={handleClickBtnUpdate}
+                        handleClickBtnView={handleClickBtnView}
+                    />
                 </div>
                 <ModalCreateUser
                     show={showModalCreateUser}
@@ -63,6 +79,14 @@ const ManageUser = (props) => {
                     dataUpdate={dataUpdate}
                     fetchListUsers={fetchListUsers}
                     resetUpdateData={resetUpdateData}
+                />
+
+                <ModalViewUSer
+                    show={showModalViewUser}
+                    setShow={setShowModalViewUSer}
+                    dataView={dataView}
+                    fetchListUsers={fetchListUsers}
+                    resetViewData={resetViewData}
                 />
             </div>
         </div>
